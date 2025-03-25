@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prospera Free - New Amazing HTML5 Template</title>
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="stylesheet" href="css/responsee.css">
+  <link rel="stylesheet" href="owl-carousel/owl.carousel.css">
+  <link rel="stylesheet" href="owl-carousel/owl.theme.css">
+  <!-- CUSTOM STYLE -->
+  <link rel="stylesheet" href="css/template-style.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800&subset=latin,latin-ext' rel='stylesheet'
+    type='text/css'>
+  <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="js/validation.js"></script>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .control-panel {
+      padding: 20px;
+      background-color: #222;
+      display: inline-block;
+      border-radius: 10px;
+      width: 60%;
+    }
+
+    #screen {
+      width: 100%;
+      height: 100px;
+      background-color: #0a0;
+      padding: 10px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border-radius: 5px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+      width: 30%;
+      margin-inline: auto;
+    }
+
+    .button {
+      background-color: #00aaff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .led-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+      gap: 12px;
+    }
+
+    .led {
+      width: 20px;
+      height: 20px;
+      margin: 5px;
+      border-radius: 50%;
+      background-color: gray;
+    }
+
+    .led.green {
+      background-color: #00EE00;
+    }
+
+    .led.red {
+      background-color: red;
+    }
+
+    .led.yellow {
+      background-color: yellow;
+    }
+
+    .led.blue {
+      background-color: #33CCFF;
+    }
+
+    .led-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 80px;
+      align-items: center;
+    }
+
+    .led-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: fit-content;
+      margin: auto;
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    .button-led:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+    }
+
+    .multi-button-text {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .line-button {
+      width: 10%;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body class="size-1140">
+  <!-- PREMIUM FEATURES BUTTON -->
+  <!-- HEADER -->
+  <header role="banner">
+    <!-- Top Bar -->
+
+    <!-- Top Navigation -->
+    <nav class="background-white background-primary-hightlight">
+      <div class="line">
+        <div class="s-12 l-2">
+          <a href="trangchu.html" class="logo"><img src="img/logo-free.png" alt=""></a>
+        </div>
+        <div class="top-nav s-12 l-10">
+          <p class="nav-text"></p>
+          <ul class="right chevron">
+            <li><a href="trangchu.html">TRANG CHỦ</a></li>
+            <li><a> TÍNH NĂNG KỸ THUẬT, CẤU TẠO</a>
+              <ul>
+                <li><a href="tinhnang.html">Tính năng kỹ thuật</a></li>
+                <li><a href="cautao.html">Cấu tạo</a></li>
+              </ul>
+            </li>
+            <li><a>KHAI THÁC SỬ DỤNG</a>
+              <ul>
+                <li><a href="trienkhailapdat.html">Triển khai, lắp đặt, đấu nối</a></li>
+                <li><a href="giamsattrangthai.html">Giám sát trạng thái hoạt động</a></li>
+                <li><a href="Thietlapcau hinh.html">Thiết lập cấu hình</a></li>
+                <li><a href="dokiemtra.html">Đo, kiểm tra các tham số cơ bản</a></li>
+                <li><a href="thuhoi.html">Thu hồi thiết bị</a></li>
+              </ul>
+            </li>
+            <li><a href="khacphucsuco.html">KHẮC PHỤC MỘT SỐ SỰ CỐ</a></li>
+            <li><a href="baoquanbaoduong.html">BẢO QUẢN, BẢO DƯỠNG</a></li>
+            </li>
+            <li><a href="tracnghiem.html">KIỂM TRA KIẾN THỨC</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- Function -->
+  <div class="control-panel">
+    <div id="screen">TT KTTTCNC <br /> MQ-04A</div>
+    <div class="button-group">
+      <div class="button-text">
+        DOWN
+        <button class="led blue button-led" onclick="handleButtonClick('down')"></button>
+      </div>
+      <div class="multi-button-text">
+        <div class="button-text">
+          CANCEL
+          <button class="led blue button-led" onclick="handleButtonClick('cancel')"></button>
+        </div>
+        <div class="button-text">
+          OK
+          <button class="led blue button-led" onclick="handleButtonClick('on')"></button>
+        </div>
+      </div>
+      <div class="button-text">
+        UP
+        <button class="led blue button-led" onclick="handleButtonClick('up')"></button>
+      </div>
+    </div>
+    <div class="led-container">
+      <div class="led-group">
+        <div class="led-text">POWER</div>
+        <div class="led green"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">SYNC <br> LOS</div>
+        <div class="led red"></div>
+      </div>
+
+      <!-- <div class="group-label">E1 LOS</div> -->
+
+      <div class="led-group">
+        <div class="led-text">CH1</div>
+        <div class="led red"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">CH2</div>
+        <div class="led red"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">CH3</div>
+        <div class="led red"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">CH4</div>
+        <div class="led red"></div>
+      </div>
+
+      <!-- <div class="group-label">LPBK</div> -->
+      <div class="line-button"></div>
+
+      <div class="led-group">
+        <div class="led-text">AIS</div>
+        <div class="led red"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">LOC</div>
+        <div class="led yellow"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">RMT</div>
+        <div class="led yellow"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">OPTIC</div>
+        <div class="led green"></div>
+      </div>
+    </div>
+  </div>
+  <!-- MAIN -->
+  <main role="main">
+    <!-- Main Carousel -->
+    <section class="section background-dark">
+      <div class="line">
+        <div class="carousel-fade-transition owl-carousel carousel-main carousel-nav-white carousel-wide-arrows">
+          <div class="item">
+            <div class="s-12 center">
+              <img src="img/01-boxed.jpg" alt="">
+              <div class="carousel-content">
+                <div class="padding-2x">
+                  <div class="s-12 m-12 l-8">
+                    <p
+                      class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1">
+                      Prospera is the New Amazing HTML5 Template</p>
+                    <p class="text-white text-size-16 margin-bottom-40">Duis autem vel eum iriure dolor in hendrerit in
+                      vulputate velit<br> esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="s-12 center">
+              <img src="img/02-boxed.jpg" alt="">
+              <div class="carousel-content">
+                <div class="padding-2x">
+                  <div class="s-12 m-12 l-8">
+                    <p
+                      class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1">
+                      With Fully Responsive Components</p>
+                    <p class="text-white text-size-16 margin-bottom-30">Duis autem vel eum iriure dolor in hendrerit in
+                      vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="s-12 center">
+              <img src="img/01-boxed.jpg" alt="">
+              <div class="carousel-content">
+                <div class="padding-2x">
+                  <div class="s-12 m-12 l-8">
+                    <p
+                      class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1">
+                      Prospera is the New Amazing HTML5 Template</p>
+                    <p class="text-white text-size-16 margin-bottom-40">Duis autem vel eum iriure dolor in hendrerit in
+                      vulputate velit<br> esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1 -->
+    <section class="section background-white">
+      <div class="line">
+        <div class="margin">
+          <div class="s-12 m-12 l-4 margin-m-bottom">
+            <img class="margin-bottom" src="img/img-01.jpg" alt="">
+            <h2 class="text-thin">Clean Design</h2>
+            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p>
+            <a class="text-more-info text-primary-hover" href="/">Read more</a>
+          </div>
+          <div class="s-12 m-12 l-4 margin-m-bottom">
+            <img class="margin-bottom" src="img/img-02.jpg" alt="">
+            <h2 class="text-thin">Valid code</h2>
+            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p>
+            <a class="text-more-info text-primary-hover" href="/">Read more</a>
+          </div>
+          <div class="s-12 m-12 l-4 margin-m-bottom">
+            <img class="margin-bottom" src="img/img-03.jpg" alt="">
+            <h2 class="text-thin">Totally free</h2>
+            <p>Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat.</p>
+            <a class="text-more-info text-primary-hover" href="/">Read more</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <!-- Main Footer -->
+    <hr class="break margin-top-bottom-0" style="border-color: rgba(0, 38, 51, 0.80);">
+
+    <!-- Bottom Footer -->
+    <section class="padding background-dark">
+      <div class="line">
+        <div class="s-12 l-6">
+          <p class="text-size-12">Copyright 2019, Vision Design - graphic zoo</p>
+          <p class="text-size-12">All images have been purchased from Bigstock. Do not use the images in your website.
+          </p>
+        </div>
+        <div class="s-12 l-6">
+          <a class="right text-size-12" href="http://www.myresponsee.com"
+            title="Responsee - lightweight responsive framework">Design and coding<br> by Responsee Team</a>
+        </div>
+      </div>
+    </section>
+  </footer>
+  <script type="text/javascript" src="js/responsee.js"></script>
+  <script type="text/javascript" src="owl-carousel/owl.carousel.js"></script>
+  <script type="text/javascript" src="js/template-scripts.js"></script>
+  <script>
+    let modes = ["Loop Status", "Local Control", "Remote Control"];
+    let subModes = {
+      "Loop Status": ["Local", "Remote"],
+      "Local Control": ["Loop to remote", "Loop back"],
+      "Remote Control": []
+    };
+    let loopBackModes = ["E1[1]: Off", "E1[2]: Off", "E1[3]: Off", "E1[4]: Off"];
+    let currentModeIndex = 0;
+    let currentSubModeIndex = 0;
+    let isLoopBack = false;
+
+    function updateScreen() {
+      let mode = modes[currentModeIndex];
+      let subModeText = subModes[mode][currentSubModeIndex] || "";
+      document.getElementById("screen").innerText = mode + "\n" + subModeText;
+    }
+
+    function handleButtonClick(action) {
+      if (action === "on") {
+        updateScreen();
+      } else if (action === "cancel") {
+        document.getElementById("screen").innerHTML = "TT KTTTCNC <br /> MQ-04A";
+        currentModeIndex = 0;
+        currentSubModeIndex = 0;
+        isLoopBack = false;
+      } else if (action === "down") {
+        if (!isLoopBack) {
+          if (currentModeIndex < modes.length - 1) {
+            currentModeIndex++;
+            currentSubModeIndex = 0;
+          }
+        } else {
+          if (currentSubModeIndex < loopBackModes.length - 1) {
+            currentSubModeIndex++;
+          }
+        }
+        updateScreen();
+      } else if (action === "up") {
+        if (!isLoopBack) {
+          if (currentModeIndex > 0) {
+            currentModeIndex--;
+            currentSubModeIndex = 0;
+          }
+        } else {
+          if (currentSubModeIndex > 0) {
+            currentSubModeIndex--;
+          }
+        }
+        updateScreen();
+      }
+    }
+  </script>
+
+</body>
+
+</html>
