@@ -83,10 +83,18 @@
     }
 
     .led.red {
+      background-color: rgba(255, 0, 0, 0.3);
+    }
+
+    .led.red.on {
       background-color: red;
     }
 
     .led.yellow {
+      background-color: rgba(255, 255, 0, 0.3)
+    }
+
+    .led.yellow.on {
       background-color: yellow;
     }
 
@@ -178,25 +186,26 @@
   </header>
   <!-- Function -->
   <div class="control-panel">
-    <div id="screen">TT KTTTCNC <br /> MQ-04A</div>
+    <div id="screen">TT KTTTCNC <br /> MQ-04A <br />
+    </div>
     <div class="button-group">
       <div class="button-text">
         DOWN
-        <button class="led blue button-led" onclick="handleButtonClick('down')"></button>
+        <button class="led blue button-led" onclick="handleNavigateClick('down', selectMode, selectSubMode)"></button>
       </div>
       <div class="multi-button-text">
         <div class="button-text">
           CANCEL
-          <button class="led blue button-led" onclick="handleButtonClick('cancel')"></button>
+          <button class="led blue button-led" onclick="cancelControl()"></button>
         </div>
         <div class="button-text">
           OK
-          <button class="led blue button-led" onclick="handleButtonClick('on')"></button>
+          <button class="led blue button-led" onclick="handleOkClick(selectMode, selectSubMode, '')"></button>
         </div>
       </div>
       <div class="button-text">
         UP
-        <button class="led blue button-led" onclick="handleButtonClick('up')"></button>
+        <button class="led blue button-led" onclick="handleNavigateClick('up', selectMode, selectSubMode)"></button>
       </div>
     </div>
     <div class="led-container">
@@ -213,19 +222,19 @@
 
       <div class="led-group">
         <div class="led-text">CH1</div>
-        <div class="led red"></div>
+        <div class="led red l1"></div>
       </div>
       <div class="led-group">
         <div class="led-text">CH2</div>
-        <div class="led red"></div>
+        <div class="led red l2"></div>
       </div>
       <div class="led-group">
         <div class="led-text">CH3</div>
-        <div class="led red"></div>
+        <div class="led red l3"></div>
       </div>
       <div class="led-group">
         <div class="led-text">CH4</div>
-        <div class="led red"></div>
+        <div class="led red l4"></div>
       </div>
 
       <!-- <div class="group-label">LPBK</div> -->
@@ -237,11 +246,11 @@
       </div>
       <div class="led-group">
         <div class="led-text">LOC</div>
-        <div class="led yellow"></div>
+        <div class="led yellow loc"></div>
       </div>
       <div class="led-group">
         <div class="led-text">RMT</div>
-        <div class="led yellow"></div>
+        <div class="led yellow rmt"></div>
       </div>
       <div class="led-group">
         <div class="led-text">OPTIC</div>
@@ -358,57 +367,202 @@
   <script type="text/javascript" src="owl-carousel/owl.carousel.js"></script>
   <script type="text/javascript" src="js/template-scripts.js"></script>
   <script>
-    let modes = ["Loop Status", "Local Control", "Remote Control"];
-    let subModes = {
-      "Loop Status": ["Local", "Remote"],
-      "Local Control": ["Loop to remote", "Loop back"],
-      "Remote Control": []
-    };
-    let loopBackModes = ["E1[1]: Off", "E1[2]: Off", "E1[3]: Off", "E1[4]: Off"];
+    // NoLp = No Loop
+    // LBack = Loop back
+    // LtoR = Loop to remote
+    let modes = ["Loop status", "Local control", "Remote control"];
+    let LoopStatusSubMode = ["Local", "Remote"];
+    let LocalControlSubMode = ["Loop to remote", "Loop back"];
+    let RemoteControlSubMode = ["Loop to remote", "Loop back"];
+    let LoopToRemoteControl = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
+    let LoopBackControl = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
+
+    let initLocalControlStatus = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
+    let initRemoteControlStatus = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
+    let selectMode = ""
+    let selectSubMode = "";
+    let tempMode = "";
+    let tempSubMode = "";
     let currentModeIndex = 0;
     let currentSubModeIndex = 0;
-    let isLoopBack = false;
 
-    function updateScreen() {
-      let mode = modes[currentModeIndex];
-      let subModeText = subModes[mode][currentSubModeIndex] || "";
-      document.getElementById("screen").innerText = mode + "\n" + subModeText;
+    function handleCancelClick() {
+      console.log("run handle cancel click");
+      document.getElementById("screen").innerText = "TT KTTTCNC <br /> MQ-04A";
+      selectMode = "";
+      selectSubMode = "";
+      currentModeIndex = 0;
+      currentSubModeIndex = 0;
     }
+    function handleNavigateClick(action, mode, subMode) {
+      console.log("run handle navigate click");
+      console.log(selectMode, selectSubMode)
+      if (action == "down" || action == "up") {
+        if (mode == "") {
+          let maxIndex = modes.length - 1;
+          currentModeIndex = (action == "down")
+            ? Math.min(currentModeIndex + 1, maxIndex)
+            : Math.max(currentModeIndex - 1, 0);
+          currentSubModeIndex = 0;
+          document.getElementById("screen").innerText = modes[currentModeIndex];
+          tempMode = modes[currentModeIndex];
+          console.log("currentModeIndex: ", modes[currentModeIndex]);
 
-    function handleButtonClick(action) {
-      if (action === "on") {
-        updateScreen();
-      } else if (action === "cancel") {
-        document.getElementById("screen").innerHTML = "TT KTTTCNC <br /> MQ-04A";
-        currentModeIndex = 0;
-        currentSubModeIndex = 0;
-        isLoopBack = false;
-      } else if (action === "down") {
-        if (!isLoopBack) {
-          if (currentModeIndex < modes.length - 1) {
-            currentModeIndex++;
-            currentSubModeIndex = 0;
-          }
+        } else if (mode == "Loop status") {
+          let maxIndex = LoopStatusSubMode.length - 1;
+          currentSubModeIndex = (action == "down")
+            ? Math.min(currentSubModeIndex + 1, maxIndex)
+            : Math.max(currentSubModeIndex - 1, 0);
+          document.getElementById("screen").innerHTML = "Loop status <br/> " + LoopStatusSubMode[currentSubModeIndex];
+          console.log("currentSubModeIndex: ", LoopStatusSubMode[currentSubModeIndex]);
+        } else if (mode == "Local control") {
+          let maxIndex = LocalControlSubMode.length - 1;
+          currentSubModeIndex = (action == "down")
+            ? Math.min(currentSubModeIndex + 1, maxIndex)
+            : Math.max(currentSubModeIndex - 1, 0);
+          document.getElementById("screen").innerHTML = "Local control <br/> " + LocalControlSubMode[currentSubModeIndex];
+          console.log("currentSubModeIndex: ", LocalControlSubMode[currentSubModeIndex]);
         } else {
-          if (currentSubModeIndex < loopBackModes.length - 1) {
-            currentSubModeIndex++;
-          }
+          let maxIndex = RemoteControlSubMode.length - 1;
+          currentSubModeIndex = (action == "down")
+            ? Math.min(currentSubModeIndex + 1, maxIndex)
+            : Math.max(currentSubModeIndex - 1, 0);
+          document.getElementById("screen").innerHTML = "Remote control <br/> " + RemoteControlSubMode[currentSubModeIndex];
+          console.log("currentSubModeIndex: ", RemoteControlSubMode[currentSubModeIndex]);
+
         }
-        updateScreen();
-      } else if (action === "up") {
-        if (!isLoopBack) {
-          if (currentModeIndex > 0) {
-            currentModeIndex--;
-            currentSubModeIndex = 0;
-          }
-        } else {
-          if (currentSubModeIndex > 0) {
-            currentSubModeIndex--;
-          }
-        }
-        updateScreen();
       }
     }
+    function handleOkClick(mode, subMode, actionSubmode) {
+      console.log("run handle ok click");
+      console.log("tempMode: ", tempMode);
+      if (tempMode != "") {
+        if (tempSubMode == "") {
+          selectMode = tempMode;
+          controlSubmode(tempMode, 'down');
+        } else {
+          controlActionSubmode(tempMode, tempSubMode, 'down');
+        }
+      } else {
+        handleNavigateClick('down')
+      }
+    }
+    function selectModeHandle(mode) {
+      console.log("run select mode handle");
+      if (mode === "Loop status") {
+        document.getElementById("screen").innerText = "Loop status";
+        selectMode = mode;
+        selectSubMode = "Local";
+      } else if (mode === "Local control") {
+        document.getElementById("screen").innerText = "Local control";
+        selectMode = mode;
+        selectSubMode = "Loop to remote";
+      } else {
+        document.getElementById("screen").innerText = "Remote control";
+        selectMode = mode;
+        selectSubMode = "Loop to remote";
+      }
+    }
+
+    function controlSubmode(mode, navigateSubMode) {
+      console.log("run control submode");
+      console.log("mode: ", mode);
+      if (mode == "Loop status") {
+        if (navigateSubMode == "down") {
+          document.getElementById("screen").innerHTML = "Loop status <br/> Remote";
+          subMode = "Remote";
+        } else if (navigateSubMode == "up") {
+          document.getElementById("screen").innerHTML = "Loop status <br/> Local";
+          subMode = "Local";
+        } else if (navigateSubMode == "ok") {
+          ControlSubmode("Loop status", "ok");
+        } else if (navigateSubMode == "cancel") {
+          CancelControl();
+        }
+      } else if (mode == "Local control") {
+        if (navigateSubMode == "down") {
+          document.getElementById("screen").innerHTML = "Local control <br/> Loop back";
+          subMode = "Loop back";
+        } else if (navigateSubMode == "up") {
+          document.getElementById("screen").innerHTML = "Local control <br/> Loop to remote";
+          subMode = "Loop to remote";
+        } else if (navigateSubMode == "ok") {
+          ControlSubmode("Local control", "ok");
+        } else if (navigateSubMode == "cancel") {
+          CancelControl();
+        }
+      } else {
+        if (navigateSubMode == "down") {
+          document.getElementById("screen").innerHTML = "Remote control <br/> Loop back";
+          subMode = "Loop back";
+        } else if (navigateSubMode == "up") {
+          document.getElementById("screen").innerHTML = "Remote control <br/> Loop to remote";
+          subMode = "Loop to remote";
+        } else if (navigateSubMode == "ok") {
+          ControlSubmode("Remote control", "ok");
+        } else if (navigateSubMode == "cancel") {
+          CancelControl();
+        }
+      }
+    }
+
+    function controlActionSubmode(mode, subMode, action) {
+      if (mode == "Loop status") {
+        if (subMode == "Local") {
+          if (action == "down") {
+            document.getElementById("screen").innerHTML =
+              initLocalControlStatus.slice(0, 2).join(" ") + "<br>" +
+              initLocalControlStatus.slice(2).join(" ");
+          } else {
+            document.getElementById("screen").innerHTML = "Loop status <br/> Local";
+          }
+        } else {
+          if (action == "down") {
+            document.getElementById("screen").innerHTML = "Loop status <br/> Local";
+          } else {
+            document.getElementById("screen").innerHTML = "Loop status <br/> Remote";
+          }
+        }
+      } else if (mode == "Local control") {
+        if (subMode == "Loop to remote") {
+          if (action == "down") {
+            document.getElementById("screen").innerHTML = "Local control <br/> Loop back";
+          } else {
+            document.getElementById("screen").innerHTML = "Local control <br/> Loop to remote";
+          }
+        } else {
+          if (action == "down") {
+            document.getElementById("screen").innerHTML = "Local control <br/> Loop to remote";
+          } else {
+            document.getElementById("screen").innerHTML = "Local control <br/> Loop back";
+          }
+        }
+      } else {
+        if (subMode == "Loop to remote") {
+          if (action == "down") {
+            document.getElementById("screen").innerHTML = "Remote control <br/> Loop back";
+          } else {
+            document.getElementById("screen").innerHTML = "Remote control <br/> Loop to remote";
+          }
+        } else {
+          if (action == "down") {
+            document.getElementById("screen").innerHTML = "Remote control <br/> Loop to remote";
+          } else {
+            document.getElementById("screen").innerHTML = "Remote control <br/> Loop back";
+          }
+        }
+      }
+    }
+    function cancelControl() {
+      document.getElementById("screen").innerHTML = "TT KTTTCNC <br /> MQ-04A";
+      mode = "";
+      subMode = "";
+      tempMode = "";
+      tempSubMode = "";
+      currentModeIndex = 0;
+      currentSubModeIndex = 0;
+    }
+
   </script>
 
 </body>
