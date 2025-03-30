@@ -192,7 +192,7 @@
       <div class="button-text">
         DOWN
         <button class="led blue button-led"
-          onclick="handleDownClick(selectMode, selectSubMode, selectSubSubMode)"></button>
+          onclick="handleDownClick(selectMode, selectSubMode, selectSubSubMode, selectSubSubSubMode)"></button>
       </div>
       <div class="multi-button-text">
         <div class="button-text">
@@ -202,13 +202,13 @@
         <div class="button-text">
           OK
           <button class="led blue button-led"
-            onclick="handleOkClick(selectMode, selectSubMode, selectSubSubMode)"></button>
+            onclick="handleOkClick(selectMode, selectSubMode, selectSubSubMode, selectSubSubSubMode)"></button>
         </div>
       </div>
       <div class="button-text">
         UP
         <button class="led blue button-led"
-          onclick="handleUpClick(selectMode, selectSubMode, selectSubSubMode)"></button>
+          onclick="handleUpClick(selectMode, selectSubMode, selectSubSubMode, selectSubSubSubMode)"></button>
       </div>
     </div>
     <div class="led-container">
@@ -378,8 +378,10 @@
     let LocalControlSubMode = ["Loop to remote", "Loop back"];
     let RemoteControlSubMode = ["Loop to remote", "Loop back"];
 
-    let LoopToRemoteControl = ["E[1]: Off", "E[2]: Off", "E[3]: Off", "E[4]: Off"];
-    let LoopBackControl = ["E[1]: Off", "E[2]: Off", "E[3]: Off", "E[4]: Off"];
+    let LoopToRemoteControl = ["E[1]", "E[2]", "E[3]", "E[4]"];
+    let LoopToRemoteState= ["Off", "Off", "Off", "Off"];
+    let LoopBackControl = ["E[1]", "E[2]", "E[3]", "E[4]"];
+    let LoopBackState = ["Off", "Off", "Off", "Off"];
 
     let initLocalControlStatus = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
     let initRemoteControlStatus = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
@@ -387,11 +389,16 @@
     let selectMode = ""
     let selectSubMode = "";
     let selectSubSubMode = "";
+    let selectSubSubSubMode = ""; 
     let tempMode = "";
     let tempSubMode = "";
     let tempSubSubMode = "";
+    let tempSubSubSubMode = "";
+
     let currentModeIndex = 0;
     let currentSubModeIndex = 0;
+    let currenSubSubModeIndex = 0;
+    let currentSubSubSubModeIndex = 0;
     let currentControlStatus = 0;
     function handleCancelClick() {
       selectMode = "";
@@ -403,7 +410,7 @@
       tempSubMode = "";
       tempSubSubMode = "";
     }
-    function handleDownClick(mode, subMode, subSubMode) {
+    function handleDownClick(mode, subMode, subSubMode, subSubSubMode) {
       console.log("run handle down click");
       console.log("mode: ", tempMode);
       console.log("subMode: ", tempSubMode);
@@ -431,14 +438,18 @@
         if (subMode == "Loop to remote") {
           document.getElementById("screen").innerHTML = "Local control <br />" + LocalControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopToRemoteControl[currentControlStatus];
+            console.log("Line 441: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.min(currentControlStatus + 1, LoopToRemoteControl.length - 1);
-            document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus]; 
           }
         } else if (subMode == "Loop back") {
           document.getElementById("screen").innerHTML = "Local control <br />" + LocalControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopBackControl[currentControlStatus];
+            console.log("Line 457: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.min(currentControlStatus + 1, LoopBackControl.length - 1);
-            document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
           }
         }
       } else if (mode == "Remote control") {
@@ -448,14 +459,18 @@
         if (subMode == "Loop to remote") {
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopToRemoteControl[currentControlStatus];
+            console.log("Line 473: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.min(currentControlStatus + 1, LoopToRemoteControl.length - 1);
-            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopToRemoteControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus];
           }
         } else if (subMode == "Loop back") {
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopBackControl[currentControlStatus];
+            console.log("Line 489: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.min(currentControlStatus + 1, LoopBackControl.length - 1);
-            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopBackControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
           }
         } else {
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
@@ -463,7 +478,7 @@
       }
 
     }
-    function handleUpClick(mode, subMode, subSubMode) {
+    function handleUpClick(mode, subMode, subSubMode, subSubSubMode) {
       console.log("run handle up click");
       console.log("mode: ", tempMode);
       console.log("subMode: ", tempSubMode);
@@ -491,14 +506,18 @@
         if (tempSubMode == "Loop to remote") {
           document.getElementById("screen").innerHTML = "Local control <br />" + LocalControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopToRemoteControl[currentControlStatus];
+            console.log("Line 541: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.max(currentControlStatus - 1, 0);
-            document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus];
           }
         } else if (tempSubMode == "Loop back") {
           document.getElementById("screen").innerHTML = "Local control <br />" + LocalControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopBackControl[currentControlStatus];
+            console.log("Line 557: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.max(currentControlStatus - 1, 0);
-            document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
           }
         } else {
           document.getElementById("screen").innerHTML = "Local control <br />" + LocalControlSubMode[currentSubModeIndex];
@@ -510,21 +529,29 @@
         if (tempSubMode == "Loop to remote") {
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopToRemoteControl[currentControlStatus];
+            console.log("Line 573: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.max(currentControlStatus - 1, 0);
-            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopToRemoteControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus];
           }
         } else if (tempSubMode == "Loop back") {
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
           if (subSubMode != "") {
+            tempSubSubMode = LoopBackControl[currentControlStatus];
+            console.log("Line 589: subSubMode: ", tempSubSubMode);
             currentControlStatus = Math.max(currentControlStatus - 1, 0);
-            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopBackControl[currentControlStatus];
+            document.getElementById("screen").innerHTML = "Remote control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
           }
         } else {
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
         }
       }
     }
-    function handleOkClick(mode, subMode, subSubMode) {
+    function handleOkClick(mode, subMode, subSubMode, subSubSubMode) {
+      if(tempMode == "" && tempSubMode == "" && tempSubSubMode == "" && tempSubSubSubMode == ""){
+        document.getElementById("screen").innerHTML = "Loop status <br />"
+        tempMode = "Loop status";
+      }
       console.log("run handle ok click");
       selectMode = tempMode;
       selectSubMode = tempSubMode;
@@ -543,22 +570,36 @@
         }
       } else if (tempMode == "Local control") {
         if (tempSubMode == "Loop to remote") {
-          document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[0];
-          tempSubSubMode = "E[1]: Off";
+          document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus];
+          
+          selectSubSubMode = tempSubSubMode;
+          if(LoopToRemoteControl[currentControlStatus] == "E[1]: Off"){
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus]+ ": " + LoopToRemoteState[currentControlStatus];
+          } else {
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus];
+          }
         } else if (tempSubMode == "Loop back") {
-          document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[0];
-          tempSubSubMode = "E[1]: Off";
+          document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
+          tempSubSubMode = LoopBackControl[currentControlStatus];
+          selectSubSubMode = tempSubSubMode;
+          if(tempSubSubSubMode == "Off"){
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
+          } else {
+            document.getElementById("screen").innerHTML = "Local control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
+          }
         } else {
           document.getElementById("screen").innerHTML = "Local control <br /> Loop to remote";
           tempSubMode = "Loop to remote";
         }
       } else if (tempMode == "Remote control") {
         if (tempSubMode == "Loop to remote") {
-          document.getElementById("screen").innerHTML = "Remote control <br />" + LoopToRemoteControl[0];
-          tempSubSubMode = "E[1]: Off";
+          document.getElementById("screen").innerHTML = "Remote control <br />" + LoopToRemoteControl[currentControlStatus] + ": " + LoopToRemoteState[currentControlStatus];
+          
+          selectSubSubMode = tempSubSubMode;
         } else if (tempSubMode == "Loop back") {
-          document.getElementById("screen").innerHTML = "Remote control <br />" + LoopBackControl[0];
-          tempSubSubMode = "E[1]: Off";
+          document.getElementById("screen").innerHTML = "Remote control <br />" + LoopBackControl[currentControlStatus] + ": " + LoopBackState[currentControlStatus];
+          tempSubSubMode = LoopBackControl[currentControlStatus];
+          selectSubSubMode = tempSubSubMode;
         } else {
           document.getElementById("screen").innerHTML = "Remote control <br /> Loop to remote";
           tempSubMode = "Loop to remote";
