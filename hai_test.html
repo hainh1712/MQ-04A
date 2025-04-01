@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prospera Free - New Amazing HTML5 Template</title>
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="stylesheet" href="css/responsee.css">
+  <link rel="stylesheet" href="owl-carousel/owl.carousel.css">
+  <link rel="stylesheet" href="owl-carousel/owl.theme.css">
+  <!-- CUSTOM STYLE -->
+  <link rel="stylesheet" href="css/template-style.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800&subset=latin,latin-ext' rel='stylesheet'
+    type='text/css'>
+  <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="js/validation.js"></script>
+  <script>
+    // NoLp = No Loop
+    // LBack = Loop back
+    // LtoR = Loop to remote
+    let modes = ["Loop status", "Local control", "Remote control"];
+    let LoopStatusSubMode = ["Local", "Remote"];
+    let LocalControlSubMode = ["Loop to remote", "Loop back"];
+    let RemoteControlSubMode = ["Loop to remote", "Loop back"];
+
+    let LocalControlLedState = ["E[1]", "E[2]", "E[3]", "E[4]"];
+    let LocalControlLedStatus = ["Off", "Off", "Off", "Off"];
+    let RemoteControlLedState = ["E[1]", "E[2]", "E[3]", "E[4]"];
+    let RemoteControlLedStatus = ["Off", "Off", "Off", "Off"];
+
+    let initLocalControlStatus = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
+    let initRemoteControlStatus = ["L1: NoLp", "L2: NoLp", "L3: NoLp", "L4: NoLp"];
+
+    let selectMode = ""
+    let selectSubMode = "";
+    let selectSubSubMode = "";
+    let selectSubSubSubMode = "";
+    let tempMode = "";
+    let tempSubMode = "";
+    let tempSubSubMode = "";
+    let tempSubSubSubMode = "";
+
+    let currentModeIndex = 0;
+    let currentSubModeIndex = 0;
+    let currentSubSubModeIndex = 0;
+    let currentSubSubSubModeIndex = 0;
+    let currentControlStatus = 0;
+
+    function changeMode() {
+      currentModeIndex = (currentModeIndex + 1) % modes.length; 
+      currentSubModeIndex = 0;
+      document.getElementById("screen").innerHTML = modes[currentModeIndex];
+      tempMode = modes[currentModeIndex];
+    }
+    function changeSubMode(mode){
+      if(mode == "Loop status"){
+        currentSubModeIndex = (currentSubModeIndex + 1) % LoopStatusSubMode.length;
+        document.getElementById("screen").innerHTML = selectMode + "<br />" + LoopStatusSubMode[currentSubModeIndex];
+        tempSubMode = LoopStatusSubMode[currentSubModeIndex];
+      } else if (mode == "Local control"){
+        currentSubModeIndex = (currentSubModeIndex + 1) % LocalControlSubMode.length;
+        document.getElementById("screen").innerHTML = selectMode + "<br />" + LocalControlSubMode[currentSubModeIndex];
+        tempSubMode = LocalControlSubMode[currentSubModeIndex];
+      } else if (mode == "Remote control"){
+        currentSubModeIndex = (currentSubModeIndex + 1) % RemoteControlSubMode.length;
+        document.getElementById("screen").innerHTML = selectMode + "<br />" + RemoteControlSubMode[currentSubModeIndex];
+        tempSubMode = RemoteControlSubMode[currentSubModeIndex];
+      }
+    }
+    function changeSubSubMode(mode, subMode) {
+      if(mode == "Local control"){
+        if(subMode == "Loop to remote"){
+          currentSubSubModeIndex = (currentSubSubModeIndex + 1) % LocalControlLedState.length;
+          document.getElementById("screen").innerHTML = selectMode + "<br />" + selectSubMode + "<br />" + LocalControlLedState[currentSubSubModeIndex];
+          tempSubSubMode = LocalControlLedState[currentSubSubModeIndex];
+        } else if(subMode == "Loop back"){
+          currentSubSubModeIndex = (currentSubSubModeIndex + 1) % LocalControlLedState.length;
+          document.getElementById("screen").innerHTML = selectMode + "<br />" + selectSubMode + "<br />" + LocalControlLedState[currentSubSubModeIndex];
+          tempSubSubMode = LocalControlLedState[currentSubSubModeIndex];
+        }
+      } else if(mode == "Remote control"){
+        if(subMode == "Loop to remote"){
+          currentSubSubModeIndex = (currentSubSubModeIndex + 1) % RemoteControlLedState.length;
+          document.getElementById("screen").innerHTML = selectMode + "<br />" + selectSubMode + "<br />" + RemoteControlLedState[currentSubSubModeIndex];
+          tempSubSubMode = RemoteControlLedState[currentSubSubModeIndex];
+        } else if(subMode == "Loop back"){
+          currentSubSubModeIndex = (currentSubSubModeIndex + 1) % RemoteControlLedState.length;
+          document.getElementById("screen").innerHTML = selectMode + "<br />" + selectSubMode + "<br />" + RemoteControlLedState[currentSubSubModeIndex];
+          tempSubSubMode = RemoteControlLedState[currentSubSubModeIndex];
+        }
+      } 
+    }
+    function handleOkClick(mode, subMode, subSubMode, subSubSubMode) {
+      console.log("run handleOkClick");
+      console.log("mode: " + selectMode + "---" + tempMode);
+      console.log("subMode: " + selectSubMode + "---" + tempSubMode);
+      console.log("subSubMode: " + selectSubSubMode + "---" + tempSubSubMode);
+      console.log("subSubSubMode: " + selectSubSubSubMode + "---" + tempSubSubSubMode);
+      if (mode == "") {
+        tempMode = "Loop status";
+        document.getElementById("screen").innerHTML = tempMode;
+      }
+      else {
+        selectMode = tempMode;
+        if (tempMode == "Loop status") {
+          tempSubMode = LoopStatusSubMode[0];
+          document.getElementById("screen").innerHTML = tempMode + "<br />" + tempSubMode;
+        } else if (tempMode == "Local control") {
+          tempSubMode = LocalControlSubMode[0];
+          document.getElementById("screen").innerHTML = tempMode + "<br />" + tempSubMode;
+        } else if (tempMode == "Remote control") {
+          tempSubMode = RemoteControlSubMode[0]; 
+          document.getElementById("screen").innerHTML = tempMode + "<br />" + tempSubMode;
+        } 
+      }
+    }
+    function handleDownClick(mode, subMode, subSubMode, subSubSubMode) {
+      console.log("run handleDownClick");
+      if (mode == "") {
+        changeMode();
+      }
+      else {
+        if (selectMode == "Loop status") {
+          changeSubMode(selectMode);
+        } 
+        else if (selectMode == "Local control") {
+          changeSubMode(selectMode);
+          
+        } else if (selectMode == "Remote control") {
+          changeSubMode(selectMode);
+          
+        }
+      }
+      console.log("mode: " + selectMode + "---" + tempMode);
+      console.log("subMode: " + selectSubMode + "---" + tempSubMode);
+      console.log("subSubMode: " + selectSubSubMode + "---" + tempSubSubMode);
+      console.log("subSubSubMode: " + selectSubSubSubMode + "---" + tempSubSubSubMode);
+    }
+    function handleUpClick(mode, subMode, subSubMode, subSubSubMode) {
+      console.log("run handleUpClick");
+      if(mode == ""){
+        changeMode();
+      }
+      else {
+        if (tempMode == "Loop status") {
+          changeSubMode(tempMode);
+        } 
+        else if (tempMode == "Local control") {
+          changeSubMode(tempMode);
+          
+        } 
+        else if (tempMode == "Remote control") {
+          changeSubMode(tempMode);
+          
+        }
+      }
+      console.log("mode: " + selectMode + "---" + tempMode);
+      console.log("subMode: " + selectSubMode + "---" + tempSubMode);
+      console.log("subSubMode: " + selectSubSubMode + "---" + tempSubSubMode);
+      console.log("subSubSubMode: " + selectSubSubSubMode + "---" + tempSubSubSubMode);
+    }
+    function handleCancelClick() {
+      document.getElementById("screen").innerHTML = "TT KTTTCNC <br /> MQ-04A";
+      selectMode = "";
+      selectSubMode = "";
+      selectSubSubMode = "";
+      selectSubSubSubMode = "";
+      currentModeIndex = 0;
+      currentSubModeIndex = 0;
+      currentSubSubSubModeIndex = 0;
+      tempMode = "";
+      tempSubMode = "";
+      tempSubSubMode = "";
+      tempSubSubSubMode = "";
+    }
+    function turnOffLed(led) {
+      document.getElementsByClassName(led)[0].classList.remove("on");
+    }
+    function changeStatusControl(mode, subMode, action, position) {
+      console.log("run changeStatusControl");
+      if (mode == "Local control") {
+        document.getElementsByClassName("Local")[0].classList.add("on");
+      } else if (mode == "Remote control") {
+        document.getElementsByClassName("Remote")[0].classList.add("on");
+      }
+      if (subMode == 'Loop to remote') {
+        if (LocalControlLedStatus[position] == "Off") {
+          initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + action;
+          document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
+        } else if (LocalControlLedStatus[position] != "Off") {
+          initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + "Both";
+          document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
+        }
+      } else if (subMode == 'Loop back') {
+        if (RemoteControlLedStatus[position] = "Off") {
+          initRemoteControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + action;
+          document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
+        } else if (RemoteControlLedStatus[position] != "Off") {
+          initRemoteControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + "Both";
+          document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .control-panel {
+      padding: 20px;
+      background-color: #222;
+      display: flex;
+      flex-direction: row;
+      border-radius: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #screen {
+      width: 20%;
+      height: 100px;
+      background-color: #0a0;
+      padding: 10px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border-radius: 20px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+      width: 20%;
+      margin-inline: auto;
+    }
+
+    .button {
+      background-color: #00aaff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .led-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+      gap: 12px;
+    }
+
+    .led {
+      width: 20px;
+      height: 20px;
+      margin: 5px;
+      border-radius: 50%;
+      background-color: gray;
+    }
+
+    .led.green {
+      background-color: #00EE00;
+    }
+
+    .led.red {
+      background-color: rgba(255, 0, 0, 0.3);
+    }
+
+    .led.red.on {
+      background-color: red;
+    }
+
+    .led.yellow {
+      background-color: rgba(255, 255, 0, 0.3)
+    }
+
+    .led.yellow.on {
+      background-color: yellow;
+    }
+
+    .led.blue {
+      background-color: #33CCFF;
+    }
+
+    .led-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      height: 80px;
+      align-items: center;
+    }
+
+    .led-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .button-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: fit-content;
+      margin: auto;
+      text-align: center;
+      margin-inline: auto;
+    }
+
+    .button-led:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+      transition: all 0.3s ease;
+    }
+
+    .multi-button-text {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .line-button {
+      width: 10%;
+      margin: 5px 0;
+    }
+
+    .intro-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      width: 20%;
+      text-align: center;
+    }
+
+    .machine-name {
+      font-weight: 700;
+      font-size: 20px;
+    }
+
+    .e1-los-led {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+    }
+
+    .e1-los-position {
+      position: absolute;
+      width: 132px;
+      height: 1px;
+      background-color: white;
+      margin-left: 16px;
+      ;
+    }
+
+    .e1-los-position-lpbk {
+      position: absolute;
+      width: 48px;
+      height: 1px;
+      background-color: white;
+      margin-left: 16px;
+    }
+
+    .text-name {
+      position: absolute;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      margin-top: -20px;
+      font-size: 14px;
+    }
+
+    .vertical {
+      width: 1px;
+      height: 32px;
+      background-color: white;
+    }
+  </style>
+</head>
+
+<body class="size-1140">
+
+  <!-- Function -->
+  <div class="control-panel">
+    <div class="intro-info">
+      BTL THÔNG TIN LIÊN LẠC <br />
+      TRUNG TÂM KTTT CÔNG NGHỆ CAO <br /> <br />
+      <div class="machine-name">MQ-04A</div>
+    </div>
+    <div id="screen">TT KTTTCNC <br /> MQ-04A <br />
+    </div>
+    <div class="button-group">
+      <div class="button-text">
+        DOWN
+        <button class="led blue button-led"
+          onclick="handleDownClick(selectMode, selectSubMode, selectSubSubMode, selectSubSubSubMode)"></button>
+      </div>
+      <div class="multi-button-text">
+        <div class="button-text">
+          CANCEL
+          <button class="led blue button-led" onclick="handleCancelClick()"></button>
+        </div>
+        <div class="button-text">
+          OK
+          <button class="led blue button-led"
+            onclick="handleOkClick(tempMode, tempSubMode, tempSubSubMode, tempSubSubSubMode)"></button>
+        </div>
+      </div>
+      <div class="button-text">
+        UP
+        <button class="led blue button-led"
+          onclick="handleUpClick(selectMode, selectSubMode, selectSubSubMode, selectSubSubSubMode)"></button>
+      </div>
+    </div>
+    <div class="led-container">
+      <div class="led-group">
+        <div class="led-text">POWER</div>
+        <div class="led green"></div>
+      </div>
+      <div class="led-group">
+        <div class="led-text">SYNC <br> LOS</div>
+        <div class="led red"></div>
+      </div>
+
+      <!-- <div class="group-label">E1 LOS</div> -->
+      <div class="e1-los-led">
+        <div class="e1-los-position">
+          <div class="text-name">E1 LOS</div>
+        </div>
+        <div class="led-group">
+          <div class="vertical"></div>
+          <div class="led-text">CH1</div>
+          <div class="led red L1"></div>
+        </div>
+        <div class="led-group">
+          <div class="led-text">CH2</div>
+          <div class="led red L2"></div>
+        </div>
+        <div class="led-group">
+          <div class="led-text">CH3</div>
+          <div class="led red L3"></div>
+        </div>
+        <div class="led-group">
+          <div class="vertical"></div>
+          <div class="led-text">CH4</div>
+          <div class="led red L4"></div>
+        </div>
+      </div>
+      <!-- <div class="group-label">LPBK</div> -->
+      <div class="line-button"></div>
+
+      <div class="led-group">
+        <div class="led-text">AIS</div>
+        <div class="led red"></div>
+      </div>
+      <div class="e1-los-led">
+        <div class="e1-los-position-lpbk">
+          <div class="text-name">LPBK</div>
+        </div>
+        <div class="led-group">
+          <div class="vertical"></div>
+          <div class="led-text">LOC</div>
+          <div class="led yellow Local"></div>
+        </div>
+        <div class="led-group">
+          <div class="vertical"></div>
+          <div class="led-text">RMT</div>
+          <div class="led yellow Remote"></div>
+        </div>
+      </div>
+
+      <div class="led-group">
+        <div class="led-text">OPTIC</div>
+        <div class="led green"></div>
+      </div>
+    </div>
+  </div>
+  <!-- MAIN -->
+  <script type="text/javascript" src="js/responsee.js"></script>
+  <script type="text/javascript" src="owl-carousel/owl.carousel.js"></script>
+  <script type="text/javascript" src="js/template-scripts.js"></script>
+
+</body>
+
+</html>

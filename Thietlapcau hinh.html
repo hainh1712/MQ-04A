@@ -134,7 +134,6 @@
           document.getElementById("screen").innerHTML = "Remote control <br />" + RemoteControlSubMode[currentSubModeIndex];
         }
       }
-
     }
     function handleUpClick(mode, subMode, subSubMode, subSubSubMode) {
       console.log("run handle up click");
@@ -212,6 +211,9 @@
       }
     }
     function handleOkClick(mode, subMode, subSubMode, subSubSubMode) {
+      if(selectMode == ""){
+        handleDownClick("", "", "", "");
+      }
       selectMode = tempMode;
       selectSubMode = tempSubMode;
       selectSubSubMode = tempSubSubMode;
