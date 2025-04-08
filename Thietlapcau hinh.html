@@ -268,7 +268,7 @@
       <div class="multi-button-text">
         <div class="button-text">
           CANCEL
-          <button class="led blue button-led" onclick="handleFullCancelClick()"></button>
+          <button class="led blue button-led" onclick="handleCancelClick()"></button>
         </div>
         <div class="button-text">
           OK
@@ -540,26 +540,28 @@
       console.log("RemoteControlLedStatus: " + RemoteControlLedStatus);
 
       if (mode == "Local control") {
-        if (subMode === "Loop to remote" || subMode === "Loop back") {
-          let statusLed = ["Off", "On"];
-          let currentStatus = LocalControlLedState[currentSubSubModeIndex].split(":")[1]?.trim() || "Off";
-          let newStatus = (currentStatus === "On") ? "Off" : "On";
-          document.getElementById("screen").innerHTML =
-            selectMode + "<br />" + LocalControlLedState[currentSubSubModeIndex].split(":")[0] + ": " + newStatus;
-          tempSubSubSubMode = newStatus;
+        let statusLed = ["Off", "On"];
+        let length = statusLed.length;
+        let currentStatus = LocalControlLedStatus[currentSubSubModeIndex];
+        if (currentStatus == "Off") {
+          currentSubSubSubModeIndex = (navigate === "down") ? (currentSubSubSubModeIndex - 1 + length) % length : (currentSubSubSubModeIndex + 1) % length;
+        } else if (currentStatus == "On") {
+          currentSubSubSubModeIndex = (navigate === "down") ? (currentSubSubSubModeIndex - 1 + length) % length : (currentSubSubSubModeIndex + 1) % length;
         }
-
+        document.getElementById("screen").innerHTML = selectMode + "<br />" + LocalControlLedState[currentSubSubModeIndex] + ": " + statusLed[currentSubSubSubModeIndex];
+        tempSubSubSubMode = statusLed[currentSubSubSubModeIndex];
       }
       else if (mode == "Remote control") {
-        if (subMode === "Loop to remote" || subMode === "Loop back") {
-          let currentStatus = RemoteControlLedState[currentSubSubModeIndex].split(":")[1]?.trim() || "Off";
-          let newStatus = (currentStatus === "On") ? "Off" : "On";
-          document.getElementById("screen").innerHTML =
-            selectMode + "<br />" +
-            RemoteControlLedState[currentSubSubModeIndex].split(":")[0].trim() + ": " + newStatus;
-          tempSubSubSubMode = newStatus;
+        let statusLed = ["Off", "On"];
+        let length = statusLed.length;
+        let currentStatus = RemoteControlLedStatus[currentSubSubModeIndex];
+        if (currentStatus == "Off") {
+          currentSubSubSubModeIndex = (navigate === "down") ? (currentSubSubSubModeIndex - 1 + length) % length : (currentSubSubSubModeIndex + 1) % length;
+        } else if (currentStatus == "On") {
+          currentSubSubSubModeIndex = (navigate === "down") ? (currentSubSubSubModeIndex - 1 + length) % length : (currentSubSubSubModeIndex + 1) % length;
         }
-
+        document.getElementById("screen").innerHTML = selectMode + "<br />" + RemoteControlLedState[currentSubSubModeIndex] + ": " + statusLed[currentSubSubSubModeIndex];
+        tempSubSubSubMode = statusLed[currentSubSubSubModeIndex];
       }
     }
     function setData() {
@@ -734,7 +736,6 @@
       console.log("mode: " + mode);
       console.log("action: " + action);
       console.log("position: " + position);
-
       if (mode == "Local control") {
         if (selectSubSubSubMode == "On") {
           turnOnLed("Local");
@@ -746,6 +747,7 @@
           }
           else if (currentStateLedLocal == "NoLp") {
             initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + action;
+            document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("blink");
           }
         }
         else if (action == "LBack") {
@@ -768,24 +770,29 @@
         let currentStateLedRemote = initRemoteControlStatus[position].split(":")[1]?.trim();
         if (action == "LtoR") {
           if (currentStateLedRemote == "LBack") {
-            initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + "Both";
+            initRemoteControlStatus[position] = initRemoteControlStatus[position].split(":")[0].trim() + ": " + "Both";
           }
           else if (currentStateLedRemote == "NoLp") {
-            initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + action;
+            initRemoteControlStatus[position] = initRemoteControlStatus[position].split(":")[0].trim() + ": " + action;
+            document.getElementsByClassName(initRemoteControlStatus[position].split(":")[0])[0].classList.add("blink");
           }
         }
         else if (action == "LBack") {
           if (currentStateLedRemote == "LtoR") {
-            initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + "Both";
+            initRemoteControlStatus[position] = initRemoteControlStatus[position].split(":")[0].trim() + ": " + "Both";
           }
           else if (currentStateLedRemote == "NoLp") {
-            initLocalControlStatus[position] = initLocalControlStatus[position].split(":")[0].trim() + ": " + action;
+            initRemoteControlStatus[position] = initRemoteControlStatus[position].split(":")[0].trim() + ": " + action;
           }
         }
         else {
           initRemoteControlStatus[position] = initRemoteControlStatus[position].split(":")[0].trim() + ": " + action;
         }
-        document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
+        document.getElementsByClassName(initRemoteControlStatus[position].split(":")[0])[0].classList.add("on");
+      }
+      if (initLocalControlStatus[position].split(":")[1]?.trim() == "LtoR" && initRemoteControlStatus[position].split(":")[1]?.trim() == "LtoR") {
+        document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.remove("blink");
+        document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.remove("on");
       }
     }
   </script>
