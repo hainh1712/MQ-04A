@@ -653,14 +653,10 @@
         }
         selectSubSubSubMode = tempSubSubSubMode;
         if (selectSubMode == "Loop to remote") {
-          if (selectSubSubSubMode == "On") {
-            changeStatusControl(tempMode, "LtoR", currentSubSubModeIndex, selectSubSubSubMode);
-          }
+          changeStatusControl(tempMode, "LtoR", currentSubSubModeIndex, selectSubSubSubMode);
         }
         else if (selectSubMode == "Loop back") {
-          if (selectSubSubSubMode == "On") {
-            changeStatusControl(tempMode, "LBack", currentSubSubModeIndex, selectSubSubSubMode);
-          }
+          changeStatusControl(tempMode, "LBack", currentSubSubModeIndex, selectSubSubSubMode);
         }
         handleCancelClick();
         return;
@@ -854,8 +850,9 @@
         }
         else if (selectSubSubSubMode == "Off") {
           let allNoLp = initLocalControlStatus.every(item => item.split(":")[1]?.trim() === "NoLp");
-          if (allNoLp) {
-            turnOffLed();
+          console.log("allNoLp:", allNoLp, "| typeof:", typeof allNoLp);
+          if (!allNoLp) {
+            turnOffLed("Local");
           }
           if (currentStateLedLocal == "Both") {
             if (action == "LtoR") {
@@ -911,7 +908,8 @@
         }
         else if (selectSubSubSubMode == "Off") {
           let allNoLp = initRemoteControlStatus.every(item => item.split(":")[1]?.trim() === "NoLp");
-          if (allNoLp) {
+          console.log("allNoLp: " + allNoLp);
+          if (!allNoLp) {
             turnOffLed("Remote");
           }
           if (currentStateLedRemote == "Both") {
@@ -944,6 +942,13 @@
       if (initLocalControlStatus[position].split(":")[1]?.trim() == "LtoR" && initRemoteControlStatus[position].split(":")[1]?.trim() == "LtoR") {
         document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.remove("blink");
         document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.remove("on");
+      } 
+      else if(initLocalControlStatus[position].split(":")[1]?.trim() == "NoLp" && initRemoteControlStatus[position].split(":")[1]?.trim() == "NoLp") {
+        document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
+        document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.remove("blink");
+      }
+      else if(initLocalControlStatus[position].split(":")[1]?.trim() == "NoLp" && initRemoteControlStatus[position].split(":")[1]?.trim() == "NoLp") {
+        document.getElementsByClassName(initLocalControlStatus[position].split(":")[0])[0].classList.add("on");
       }
     }
   </script>
